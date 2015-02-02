@@ -1,7 +1,12 @@
 .options {
     background-color: #eeeeee;
     border-radius: 5px;
-    padding: 5px;
+    padding: 20px;
+}
+
+.options h1 {
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .print-board {
