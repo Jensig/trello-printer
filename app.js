@@ -5,8 +5,6 @@
   var stage = $('#stage');
   var make_board = _.template($('#board-template').text());
   var make_list = _.template($('#list-template').text());
-  var make_front = _.template($('#card-front-template').text());
-  var make_back = _.template($('#card-back-template').text());
 
   function showBoards() {
     var options = { filter: 'open' };
@@ -87,111 +85,6 @@
     $(".hide-card").click(function() {
       $(this).parent().hide();
     });
-  }
-
-  function print(cards, boardName) {
-
-    var fronts      = [];
-    var backs       = [];
-
-    $('body > *').hide();
-
-    var main = $('<div id="pivotal-cards-pages" class="filing-colours"></div>');
-
-    $(document).keyup(function(e) {
-      if (e.keyCode == 27) {
-        main.remove();
-        $('body > *').show();
-        body.css("background-color", "#37343A")
-      }
-    });
-
-    body.css("background-color", "#fff").append(main);
-
-    var cardCount = cards.length;
-    var cardBuildIndex = 0;
-    var printCoverImages = $("#printCovers").is(":checked");
-
-    function buildItem(item){
-      fronts.push($(make_front(item)));
-      backs.push($(make_back(item)));
-      cardBuildIndex++
-    }
-
-    _.each(cards, function(card) {
-
-        var labels = _.chain(card.labels)
-                      .map(function(label){ return label.name })
-                      .reject(function(label) { return !label; })
-                      .value()
-
-        var item = {
-          cardno       : card.idShort,
-          id           : card.id,
-          name         : card.name,
-          description  : card.desc,
-          project_name : boardName,
-          tasks        : [],
-          points       : "",
-          labels       : labels,
-          hasCover     : !!card.idAttachmentCover && printCoverImages
-        };
-
-
-        var loadChecklists = function(){
-          if(card.idChecklists[0]) {
-            Trello.checklists.get(card.idChecklists[0], function(checklist){
-              _.each(checklist.checkItems, function(checkItems){
-                item.tasks.push({
-                  description: checkItems.name,
-                  complete: checkItems.state == 'complete'
-                })
-              });
-
-              buildItem(item);
-            }, handleErrors)
-          } else {
-            buildItem(item);
-          }
-        };
-
-        if(printCoverImages && item.hasCover){
-          Trello.get("/cards/" + card.id + "/attachments/", {
-            idAttachment: card.idAttachmentCover,
-            fields: ["url"]
-          }, function(image) {
-            item.coverImageUrl = image[0].url;
-            loadChecklists();
-          }, handleErrors);
-        } else {
-          loadChecklists();
-        }
-    });
-
-    var interval = setInterval(function(){
-      if(cardCount == cardBuildIndex) {
-        clearTimeout(interval);
-
-        var cardno;
-        var front_page;
-        var back_page;
-
-        for (cardno = 0; cardno < fronts.length; cardno++) {
-          if ((cardno % 4) === 0) {
-            front_page = $('<div class="page fronts"></div>');
-            main.append(front_page);
-
-            back_page = $('<div class="page backs"></div>');
-            main.append(back_page);
-          }
-          front_page.append(fronts[cardno]);
-          back_page.append(backs[cardno]);
-        }
-
-        window.print();
-
-      }
-    }, 100);
   }
 
   function auth() {
