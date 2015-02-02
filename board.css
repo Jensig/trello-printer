@@ -1,3 +1,9 @@
+.options {
+    background-color: #eeeeee;
+    border-radius: 5px;
+    padding: 5px;
+}
+
 .print-board {
     color: #000;
 }
@@ -17,4 +23,13 @@
 
 .print-board li{
     list-style: none;
+}
+
+.hide-card span{
+    display: none;
+    color: #999999;
+}
+
+.hide-card:hover span{
+    display: inline;
 }

@@ -6,6 +6,7 @@
   <title>Trello Printer: Print boards from Trello</title>
   <link rel="stylesheet" type="text/css" href="board.css"/>
   <link rel="stylesheet" type="text/css" href="site.css" />
+  <link rel="stylesheet" type="text/css" href="print.css" media="print">
   <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:400,700' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -25,10 +26,6 @@
 
   <script type="text/x-template" id="project-list-template">
     <div id='project-list'>
-      <label>Include description: <input type="checkbox" id="includeDescription" checked></label><br>
-      <label>Include comments: <input type="checkbox" id="includeComments" checked></label><br>
-      <label>Include checklists: <input type="checkbox" id="includeChecklists" checked></label><br>
-      <label>Include checked checklist items: <input type="checkbox" id="includeCheckedItems" checked></label>
       <% _.each(boards, function(board) { %>
         <div class='project'>
           <button data-board-id='<%=board.id%>' data-board-name='<%=board.name%>'>Print Board</button>
@@ -39,19 +36,26 @@
   </script>
 
   <script type="text/x-template" id="board-template">
+    <div class="options">
+      <p>Options:</p>
+      <label>Include description: <input type="checkbox" id="includeDescription" checked></label> |
+      <label>Include checklists: <input type="checkbox" id="includeChecklists" checked></label> |
+      <label>Include checked checklist items: <input type="checkbox" id="includeCheckedItems" checked></label>
+      <label>Inlcude labels: <input type="checkbox" id="includeLabels" checked></label>
+    </div>
+
     <h1><%= boardName %></h1>
     <% _.each(cards, function(card) { %>
+      <% console.log(card); %>
       <div class="print-card">
-        <h2><%= card.name %></h2>
-        <% if(includeDescription){ %>
-          <p><%= card.desc %></p>
-        <% } %>
+        <h2 class="hide-card"><%= card.name %><span> - Hide</span></h2>
+        <p class="desc"><%= card.desc %></p>
         <span class="labels">
           <% _.each(card.labels, function(label) { %>
             <span class="label" style="background-color: <%= label.color %>"><%= label.name %></span>
           <% }); %>
         </span>
-        <div class="checklists-<%= card.id %>"></div>
+        <div class="checklists checklists-<%= card.id %>"></div>
       </div>
     <% }); %>
   </script>
@@ -60,7 +64,7 @@
     <h2><%= name %></h2>
     <ul>
       <% _.each(checkItems, function(item){ %>
-        <li><%= item.state ? "☑" : "☐" %><%= item.name %></li>
+        <li class="<%= item.state ? 'item-checked' : '' %>"><%= item.state ? "☑" : "☐" %><%= item.name %></li>
       <% }); %>
     </ul>
   </script>

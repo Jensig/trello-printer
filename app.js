@@ -32,10 +32,6 @@
 
     data.boardName          = boardName;
     data.cards              = cards;
-    data.includeDescription = $("#includeDescription").is(":checked");
-    data.includeComments    = $("#includeComments").is(":checked");
-    data.includeChecklists = $("#includeChecklists").is(":checked");
-    data.includeCheckedItems = $("#includeCheckedItems").is(":checked");
 
     main.append($(make_board(data)));
     body.css("background-color", "#fff").append(main);
@@ -54,6 +50,42 @@
           card.checklists.append($(make_list(checklist)));
         }, handleErrors);
       });
+    });
+
+    $("#includeDescription").change(function() {
+      if($(this).is(":checked")){
+        $('.desc').show();
+      }else{
+        $('.desc').hide();
+      }
+    });
+
+    $("#includeChecklists").change(function() {
+      if($(this).is(":checked")){
+        $('.checklists').show();
+      }else{
+        $('.checklists').hide();
+      }
+    });
+
+    $("#includeCheckedItems").change(function() {
+      if($(this).is(":checked")){
+        $('.item-checked').show();
+      }else{
+        $('.item-checked').hide();
+      }
+    });
+
+    $("#includeLabels").change(function() {
+      if($(this).is(":checked")){
+        $('.labels').show();
+      }else{
+        $('.labels').hide();
+      }
+    });
+
+    $(".hide-card").click(function() {
+      $(this).parent().hide();
     });
   }
 
