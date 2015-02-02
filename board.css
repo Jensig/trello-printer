@@ -1,0 +1,20 @@
+.print-board {
+    color: #000;
+}
+
+.print-board h1 {
+    text-decoration: underline;
+}
+
+.print-board .label {
+    padding: 5px 15px;
+    border-radius: 3px;
+    color: #FFF;
+    width: 50px;
+    text-align: center;
+    margin-right: 5px;
+}
+
+.print-board li{
+    list-style: none;
+}

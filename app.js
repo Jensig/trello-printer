@@ -1,7 +1,10 @@
-(function($, document, global, undefined){
+(function($, Trello, document, global, undefined){
+  'use strict';
 
   var body = $('body');
   var stage = $('#stage');
+  var make_board = _.template($('#board-template').text());
+  var make_list = _.template($('#list-template').text());
   var make_front = _.template($('#card-front-template').text());
   var make_back = _.template($('#card-back-template').text());
 
@@ -14,11 +17,44 @@
         var name = $(this).data("board-name");
 
         Trello.get('boards/' + id + '/cards/open', function(cards) {
-          print(cards, name)
-        })
+          newPrint(cards, name);
+        });
       })
-    }
+    };
     Trello.get('members/me/boards',  options, renderBoards, handleErrors);
+  }
+
+  function newPrint(cards, boardName){
+    $('body > *').hide();
+
+    var data = {},
+        main = $('<div id="board" class="print-board"></div>');
+
+    data.boardName          = boardName;
+    data.cards              = cards;
+    data.includeDescription = $("#includeDescription").is(":checked");
+    data.includeComments    = $("#includeComments").is(":checked");
+    data.includeChecklists = $("#includeChecklists").is(":checked");
+    data.includeCheckedItems = $("#includeCheckedItems").is(":checked");
+
+    main.append($(make_board(data)));
+    body.css("background-color", "#fff").append(main);
+
+    /**
+     * Add checklists
+     */
+    _.each(data.cards, function(card) {
+      console.log(card);
+      card.checklists = $('.checklists-' + card.id);
+      _.each(card.idChecklists, function(checklistId) {
+        Trello.checklists.get(checklistId, function(checklist){
+          _.each(checklist.checkItems, function(checkItem) {
+            checkItem.state = (checkItem.state === 'complete');
+          });
+          card.checklists.append($(make_list(checklist)));
+        }, handleErrors);
+      });
+    });
   }
 
   function print(cards, boardName) {
@@ -78,14 +114,14 @@
                   description: checkItems.name,
                   complete: checkItems.state == 'complete'
                 })
-              })
+              });
 
               buildItem(item);
             }, handleErrors)
           } else {
             buildItem(item);
           }
-        }
+        };
 
         if(printCoverImages && item.hasCover){
           Trello.get("/cards/" + card.id + "/attachments/", {
@@ -98,7 +134,7 @@
         } else {
           loadChecklists();
         }
-    })
+    });
 
     var interval = setInterval(function(){
       if(cardCount == cardBuildIndex) {
@@ -136,8 +172,6 @@
     })
   }
 
-
-
   function handleErrors(xhr, message, error) {
 
     if(xhr.status == 401) {
@@ -157,7 +191,7 @@
       } else {
         auth()
       }
-    })
+    });
     stage.append(authoriseButton)
   }
-})(jQuery, this, document)
+})(jQuery, Trello, this, document);
