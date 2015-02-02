@@ -34,6 +34,10 @@
     list-style: none;
 }
 
+.hide-card {
+    cursor: pointer;
+}
+
 .hide-card span{
     display: none;
     color: #999999;
@@ -41,4 +45,20 @@
 
 .hide-card:hover span{
     display: inline;
+}
+
+.no-print {
+    color: #999999;
+}
+
+.no-print > h2 {
+    display: block;
+}
+
+.no-print > * {
+    display: none;
+}
+
+.hide {
+    display: none;
 }

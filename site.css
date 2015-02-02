@@ -50,10 +50,17 @@ body {
   font-size: 0.9em;
   padding: 0.3em 0.5em;
   float:right;
+  margin-top: 4px;
 }
 
 .project {
   clear: both;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.project:hover {
+  background-color: #5a575d;
 }
 
 #stage button:hover {

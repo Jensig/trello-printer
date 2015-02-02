@@ -38,15 +38,15 @@
   <script type="text/x-template" id="board-template">
     <div class="options">
       <h1>Options:</h1>
-      <input type="checkbox" id="includeDescription" checked><label>Include description</label> |
-      <input type="checkbox" id="includeChecklists" checked><label>Include checklists</label> |
-      <input type="checkbox" id="includeCheckedItems" checked><label>Include checked checklist items</label> |
-      <input type="checkbox" id="includeLabels" checked><label>Inlcude labels</label>
+      <input type="checkbox" id="includeDescription" checked><label>Include Description</label> |
+      <input type="checkbox" id="includeChecklists" checked><label>Include Checklists</label> |
+      <input type="checkbox" id="includeCheckedItems" checked><label>Include Checked Items</label> |
+      <input type="checkbox" id="includeLabels" checked><label>Include Labels</label> |
+      <input type="checkbox" id="includeComments" checked><label>Include Comments</label>
     </div>
 
     <h1 class="title"><%= boardName %></h1>
     <% _.each(cards, function(card) { %>
-      <% console.log(card); %>
       <div class="print-card">
         <h2 class="hide-card"><%= card.name %><span> - Hide</span></h2>
         <p class="desc"><%= card.desc %></p>
@@ -56,6 +56,18 @@
           <% }); %>
         </span>
         <div class="checklists checklists-<%= card.id %>"></div>
+        <% if(card.actions.length){ %>
+          <div class="comments">
+            <h3>Comments:</h3>
+            <ul>
+              <% _.each(card.actions, function(action) { %>
+                <% if(action.type === 'commentCard'){ %>
+                  <li><%= action.memberCreator.fullName %>:<br> <pre><%= action.data.text %></pre></li>
+                <% } %>
+              <% }); %>
+            </ul>
+          </div>
+        <% } %>
       </div>
     <% }); %>
   </script>

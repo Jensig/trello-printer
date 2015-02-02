@@ -14,7 +14,7 @@
         var id = $(this).data("board-id");
         var name = $(this).data("board-name");
 
-        Trello.get('boards/' + id + '/cards/open', function(cards) {
+        Trello.get('boards/' + id + '/cards/open?actions=commentCard', function(cards) {
           newPrint(cards, name);
         });
       })
@@ -38,7 +38,6 @@
      * Add checklists
      */
     _.each(data.cards, function(card) {
-      console.log(card);
       card.checklists = $('.checklists-' + card.id);
       _.each(card.idChecklists, function(checklistId) {
         Trello.checklists.get(checklistId, function(checklist){
@@ -52,38 +51,53 @@
 
     $("#includeDescription").change(function() {
       if($(this).is(":checked")){
-        $('.desc').show();
+        $('.desc').removeClass('hide');
       }else{
-        $('.desc').hide();
+        $('.desc').addClass('hide');
       }
     });
 
     $("#includeChecklists").change(function() {
       if($(this).is(":checked")){
-        $('.checklists').show();
+        $('.checklists').removeClass('hide');
       }else{
-        $('.checklists').hide();
+        $('.checklists').addClass('hide');
       }
     });
 
     $("#includeCheckedItems").change(function() {
       if($(this).is(":checked")){
-        $('.item-checked').show();
+        $('.item-checked').removeClass('hide');
       }else{
-        $('.item-checked').hide();
+        $('.item-checked').addClass('hide');
       }
     });
 
     $("#includeLabels").change(function() {
       if($(this).is(":checked")){
-        $('.labels').show();
+        $('.labels').removeClass('hide');
       }else{
-        $('.labels').hide();
+        $('.labels').addClass('hide');
+      }
+    });
+
+    $("#includeComments").change(function() {
+      if($(this).is(":checked")){
+        $('.comments').removeClass('hide');
+      }else{
+        $('.comments').addClass('hide');
       }
     });
 
     $(".hide-card").click(function() {
-      $(this).parent().hide();
+      if($(this).parent().hasClass('no-print')){
+        $(this).parent().removeClass('no-print');
+        $(this).find('span').text(' - Hide');
+      }else{
+        $(this).parent().addClass('no-print');
+        $(this).find('span').text(' - Show');
+      }
+
     });
   }
 
