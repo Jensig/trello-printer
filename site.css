@@ -44,6 +44,7 @@ body {
   border-radius: 6px;
   padding: 0.6em 1em;
   box-shadow: 1px 1px 1px #000000;
+  cursor: pointer;
 }
 
 #project-list button {
@@ -51,6 +52,7 @@ body {
   padding: 0.3em 0.5em;
   float:right;
   margin-top: 4px;
+  cursor: pointer;
 }
 
 .project {

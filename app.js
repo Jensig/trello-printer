@@ -106,7 +106,7 @@
       type       : "redirect",
       success    : showBoards,
       name       : "Trello Cards",
-      expiration : "1hour",
+      expiration : "30days",
       persist    : true
     })
   }
